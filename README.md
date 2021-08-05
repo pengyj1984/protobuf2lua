@@ -1,0 +1,2 @@
+# protobuf2lua
+通过protobuf生成的descriptor文件生成lua注解文件
