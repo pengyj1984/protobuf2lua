@@ -59,6 +59,20 @@ public class Protobuf2LuaGenerator
                 // 消息(类)
                 foreach (var msg in file.MessageType)
                 {
+                    foreach (var nested in msg.NestedType)
+                    {
+                        // 在名称容器中加入类名
+                        defineBuilder.AppendLine(defineName + "." + msg.Name + "." + nested.Name + "= \"" + file.Package + "." + msg.Name + "." + nested.Name + "\"");
+                        // 在内容容器中加入注解
+                        contentBuilder.AppendLine("---@class " + containerName + "." + msg.Name + "." + nested.Name);
+                        foreach (var nf in nested.Field)
+                        {
+                            contentBuilder.AppendLine("---@field " + nf.Name + " " + GetLuaFieldType(nf));
+                        }
+
+                        contentBuilder.AppendLine("");
+                    }
+                    
                     // 在名称容器中加入类名
                     defineBuilder.AppendLine(defineName + "." + msg.Name + " = \"" + file.Package + "." + msg.Name + "\"");
                     // 在内容容器中加入注解
