@@ -59,10 +59,12 @@ public class Protobuf2LuaGenerator
                 // 消息(类)
                 foreach (var msg in file.MessageType)
                 {
+                    // 在名称容器中加入类名
+                    defineBuilder.AppendLine(defineName + "." + msg.Name + " = \"" + file.Package + "." + msg.Name + "\"");
                     foreach (var nested in msg.NestedType)
                     {
                         // 在名称容器中加入类名
-                        defineBuilder.AppendLine(defineName + "." + msg.Name + "." + nested.Name + "= \"" + file.Package + "." + msg.Name + "." + nested.Name + "\"");
+                        //defineBuilder.AppendLine(defineName + "." + msg.Name + "." + nested.Name + "= \"" + file.Package + "." + msg.Name + "." + nested.Name + "\"");
                         // 在内容容器中加入注解
                         contentBuilder.AppendLine("---@class " + containerName + "." + msg.Name + "." + nested.Name);
                         foreach (var nf in nested.Field)
@@ -73,8 +75,6 @@ public class Protobuf2LuaGenerator
                         contentBuilder.AppendLine("");
                     }
                     
-                    // 在名称容器中加入类名
-                    defineBuilder.AppendLine(defineName + "." + msg.Name + " = \"" + file.Package + "." + msg.Name + "\"");
                     // 在内容容器中加入注解
                     contentBuilder.AppendLine("---@class " + containerName + "." + msg.Name);
                     foreach (var field in msg.Field)
